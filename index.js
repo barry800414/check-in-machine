@@ -61,7 +61,8 @@ async function main() {
   });
 
   bot.onEvent(async context => {
-    console.log(context.event);
+    console.log('context:', context);
+    console.log('rawEvent:', context.event._rawEvent);
     // handle welcome message
     if (context.event.isPostback) {
       console.log('isPostback:', context.event.postback);
@@ -83,7 +84,7 @@ async function main() {
             context.setState({ isWorking: true, startTime: new Date() });
             console.log('after setting state:', context.state);
             await context.sendText('哈庫納罵踏踏！！ 你的功德正在源源不絕地產生中...');
-            await context.sendText('不如再按下 “Send Location” 傳送你的位置吧，我們會幫你記錄下你工作的位置！', genQuickReply(['SEND_LOCATION', 'CHECK_OUT']));
+            await context.sendText('不如再按下 “Send Location” 傳送你的位置吧，我們會幫你記錄下你工作的位置！', genQuickReply(['CHECK_OUT', 'SEND_LOCATION']));
           } else {
             // state: is working
             if (!context.state.location) {
