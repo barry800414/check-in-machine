@@ -96,22 +96,21 @@ async function main() {
           context.setState({ isWorking: true, startTime: new Date() });
           // console.log('after setting state:', context.state);
           await context.sendText('哈庫納罵踏踏！！ 你的功德正在源源不絕地產生中...');
-          await context.sendText('不如再按下 “Send Location” 傳送你的位置吧，我們會幫你記錄下你工作的位置！');
-          await context.sendText('記得要先開啟 GPS 定位哦！', genQuickReply([P.SEND_LOCATION, P.CHECK_OUT]));
+          await context.sendText('請再按下「Send Location」或「傳送位置」，幫你記錄下你工作的位置！');
+          await context.sendText('記得要先開啟 GPS 定位！', genQuickReply([P.SEND_LOCATION]));
         } else {
           // state: is working
           if (!context.state.location) {
-            await context.sendText('哎呀！ 你居然不知道你已經在做功德了！？ 不如這樣，順便按下 “Send Location” 傳送你的位置吧，我們會幫你記錄下你工作的位置！');
+            await context.sendText('哎呀！ 你居然不知道你已經在做功德了！？ 不如這樣，再按下 “Send Location” 傳送你的位置吧，記錄你工作的位置！');
             await context.sendText('記得要先開啟 GPS 定位哦！', genQuickReply([P.SEND_LOCATION, P.CHECK_OUT]));
           } else if (context.state.imgUrls.length === 0) {
-            await context.sendText('唔... 你其實已經在做功德了！ 不如這樣，上傳幾張可以證明你在工作、或證明雇主違法的照片，我們會幫你存起來！');
-            await context.sendText('上傳圖片的按鈕，就是原本內建的那顆按鈕喔！', genQuickReply([P.CHECK_OUT]));
+            await context.sendText('唔... 你其實已經在做功德了！\n\n現在，你可以上傳幾張可以證明你在工作、或證明雇主違法的照片，我們會幫你存起來！');
+            await context.sendText('上傳圖片的按鈕，就是原本傳圖片的按鈕喔！', genQuickReply([P.CHECK_OUT]));
           }
         }
       } else if (['不做了', '下班'].indexOf(text) >= 0 || postbackPayload === P.CHECK_OUT) {
         if (context.state.isWorking) {
           context.setState({ isWorking: false, endTime: new Date() });
-          // console.log('after setting state:', context.state);
 
           // prepare check in data
           const userId = context._session._id;
@@ -136,7 +135,6 @@ async function main() {
       // handle location message
       if (context.state.isWorking) {
         context.setState({ location, locationTimestamp });
-        // console.log('after setting state:', context.state);
       } else {
         context.setState({
           isWorking: true,
@@ -148,8 +146,8 @@ async function main() {
       if (context.state.imgUrls.length > 0) {
         await context.sendText('台灣的勞工真的 hen 棒～  該做的都做了，下班記得打卡喔！', genQuickReply([P.CHECK_OUT]));
       } else {
-        await context.sendText('工作位置已記錄，開啟做功德模式！ 現在不如傳幾張可以證明你在工作、或證明雇主違法的照片吧！');
-        await context.sendText('上傳圖片的按鈕，就是原本內建的那顆按鈕喔！', genQuickReply([P.CHECK_OUT]));
+        await context.sendText('工作位置已記錄，開啟做功德模式！ 不如再傳幾張可以證明你在工作、或證明雇主違法的照片吧！');
+        await context.sendText('上傳圖片的按鈕，就是傳圖片的那顆按鈕喔！', genQuickReply([P.CHECK_OUT]));
       }
     } else if (imgUrl) {
       // console.log('isImage:', imgUrl);
@@ -157,8 +155,8 @@ async function main() {
         context.setState({ imgUrls: context.state.imgUrls.concat([imgUrl]) });
         // console.log('after setting state:', context.state);
         if (!context.state.location) {
-          await context.sendText('感謝大大無私奉獻，需要上傳更多張也沒問題！\n然後，不如再按下 “Send Location” 傳送你的位置吧！');
-          await context.sendText('記得要先開啟 GPS 定位哦！', genQuickReply([P.SEND_LOCATION, P.CHECK_OUT]));
+          await context.sendText('感謝大大無私奉獻，需要上傳更多張也沒問題！\n然後，再按下「Send Location」或「傳送位置」，紀錄你的工作位置吧！');
+          await context.sendText('記得要先開啟 GPS 定位哦！', genQuickReply([P.SEND_LOCATION]));
         } else {
           await context.sendText('台灣的勞工真的 hen 棒～  該做的都做了，要上傳更多張也行，下班記得打卡喔！', genQuickReply([P.CHECK_OUT]));
         }
